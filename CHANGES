@@ -1,0 +1,39 @@
+== 0.3.3 - 18-Aug-2009
+* Changed license to Artistic 2.0.
+* ChangeJournalStruct objects are now frozen. This is read-only data.
+* ChangeJournalError is now ChangeJournal::Error.
+* Added test-unit 2.x as a development dependency.
+* Renamed the test and example files.
+* Some updates to the Rakefile and gemspec.
+
+== 0.3.2 - 27-Apr-2008
+* Fixed RubyForge bug #10555 (bignum too big to convert into long).
+* Lots of internal reorganization, partially in preparation for the
+  pure Ruby version that will be version 0.4.0.
+* Added a Rakefile with tasks for testing, building and installation.
+* Added a gemspec file.
+* Merged the documentation that was in the doc/changejournal.txt file
+  into the README.
+* Added a gemspec
+
+== 0.3.1 - 2-Jan-2006
+* Internal cleanup only (now compiles cleanly with -W3).
+
+== 0.3.0 - 30-Dec-2005
+* The Struct::ChangeJournalStruct now contains a third member: path.  This
+  is the full path to the file which was modified.  Thanks go to Stephen
+  Haberman for the idea, and Heesob for the implementation.
+* More tests added.
+* Example script updated.
+
+== 0.2.0 - 24-Apr-2005
+* Modified ChangeJournal#wait to return an array of structs, rather than a
+  single struct, because multiple events can be associated with a single
+  action.
+* Removed the changejournal.rd file.  The changejournal.txt file is rdoc
+  friendly, so you can generate html from that if you wish.
+* Fixed the release date for 0.1.0.
+* Minor doc and test changes or updates.
+
+== 0.1.0 - 13-Feb-2005
+* Initial release

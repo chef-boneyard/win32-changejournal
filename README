@@ -1,0 +1,57 @@
+== Description
+   A class for monitoring events related to files and directories on NTFS.
+
+== Installation
+=== Gem Installation
+   gem install win32-changejournal
+=== Local Installation
+   rake install
+
+== Synopsis
+   require 'win32/changejournal'
+   include Win32
+
+   # Indefinitely wait for a change in 'C:\' and any of its
+   # subdirectories. Print the file and action affected.
+   cj = ChangeJournal.new("C:\\")
+
+   cj.wait{ |array|
+      array.each{ |info|
+         p info.file_name
+         p info.action
+         p info.path
+      }
+   }
+
+   c.delete
+	
+== Notes
+   Based on what the MSDN documentation says, this library requires NTFS, and
+   should be preferred on that filesystem. On FAT filesystems, you should
+   use the win32-changenotify library instead.
+
+== Acknowledgements
+   This library was originally based on the CJTest module by Jeffrey
+   Cooperstein & Jeffrey Richter.
+	
+== Future Plans
+   Add a method for iterating over all change records.
+
+== Known Bugs  
+   None that I know of. Please log any bug reports on the RubyForge
+   project page at http://www.rubyforge.net/projects/win32utils
+
+== License
+   Artistic 2.0
+    
+== Copyright
+   (C) 2003-2009 Daniel J. Berger, All Rights Reserved
+    
+== Warranty
+   This library is provided "as is" and without any express or
+   implied warranties, including, without limitation, the implied
+   warranties of merchantability and fitness for a particular purpose.
+
+== Authors
+   Park Heesob
+   Daniel J. Berger

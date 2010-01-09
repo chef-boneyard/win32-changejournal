@@ -1,0 +1,10 @@
+* CHANGES
+* README
+* MANIFEST
+* Rakefile
+* win32-changejournal.gemspec
+* ext/extconf.rb
+* ext/win32/changejournal.c
+* ext/win32/changejournal.h
+* examples/example_changejournal.rb
+* test/test_win32_changejournal.rb
