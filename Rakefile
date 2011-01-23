@@ -4,36 +4,34 @@ require 'rake/testtask'
 require 'rbconfig'
 include Config
 
-desc 'Install the win32-changejournal library'
-task :install => [:build] do
-   Dir.chdir('ext'){
-      sh 'nmake install'
-   }
-end
+CLEAN.include(
+  "**/*.gem",
+  "**/*.so",
+  "**/Makefile"
+)
 
-desc 'Clean any build files for win32-changejournal'
-task :clean do
-   Dir.chdir('ext') do
-      sh 'nmake distclean' if File.exists?('changejournal.obj')
-      rm 'win32/changejournal.so' if File.exists?('win32/changejournal.so') 
-   end
-   rm_rf('lib') if File.exists?('lib')
-end
+CLOBBER.include("lib")
 
 desc "Build win32-changejournal (but don't install it)"
 task :build => [:clean] do
-   Dir.chdir('ext') do
-      ruby 'extconf.rb'
-      sh 'nmake'
-      mv 'changejournal.so', 'win32' # For the test suite
-   end
+  make = CONFIG['host_os'] =~ /mingw|cygwin/i ? "make" : "nmake"
+
+  Dir.chdir('ext') do
+    ruby 'extconf.rb'
+    sh make
+    mv 'changejournal.so', 'win32' # For the test suite
+  end
 end
 
-desc 'Build gem'
-task :build_gem do
-   eval(IO.read('win32-changejournal.gemspec'))
+namespace :gem do
+  desc "Create the win32-changejournal gem"
+  task :create do
+    spec = eval(IO.read('win32-changejournal.gemspec'))
+    Gem::Builder.new(spec).build
+  end
 end
 
+=begin
 desc 'Build a binary gem'
 task :build_binary_gem => [:build] do
    mkdir_p 'lib/win32'
@@ -82,15 +80,18 @@ task :build_binary_gem => [:build] do
 
    Gem::Builder.new(spec).build
 end
+=end
 
 desc 'Run the example program'
 task :example => [:build] do |t|
-   ruby '-Iext examples/example_changejournal.rb'
+  ruby '-Iext examples/example_changejournal.rb'
 end
 
 Rake::TestTask.new(:test) do |t|
-   task :test => [:build]
-   t.libs << 'ext'
-   t.warning = true
-   t.verbose = true
+  task :test => [:build]
+  t.libs << 'ext'
+  t.warning = true
+  t.verbose = true
 end
+
+task :default => :test
