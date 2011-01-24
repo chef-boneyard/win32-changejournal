@@ -5,13 +5,18 @@ require 'Win32API'
 begin
   require 'win32/ipc'
 rescue LoadError
-  msg = %Q{
-    The win32-ipc library is a prerequisite for this library.
-    Please install win32-ipc before continuing.
-    Exiting.
-  }
-  STDERR.puts msg
-  exit
+  begin
+    require 'rubygems'
+    require 'win32/ipc'
+  rescue LoadError
+    msg = %Q{
+      The win32-ipc library is a prerequisite for this library.
+      Please install win32-ipc before continuing.
+      Exiting.
+    }
+    STDERR.puts msg
+    exit
+  end
 end
 
 # Set $CPPFLAGS as needed since mkmf doesn't do this for us.
