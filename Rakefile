@@ -7,7 +7,12 @@ include RbConfig
 CLEAN.include(
   "**/*.gem",
   "**/*.so",
-  "**/Makefile"
+  "**/Makefile",
+  "**/*.pdb",
+  "**/*.obj",
+  "**/*.def",
+  "**/*.lib",
+  "**/*.exp"
 )
 
 CLOBBER.include("lib")
