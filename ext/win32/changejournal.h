@@ -293,9 +293,9 @@ static VALUE get_file_action(ChangeJournalStruct *ptr){
          if(NIL_P(v_arr))
             break;
 
-		   v_path = RARRAY(v_arr)->ptr[0];
+       v_path = RARRAY_PTR(v_arr)[0];
 		   rb_ary_unshift(v_path_array, v_path);
-         FRN = NUM2ULL(RARRAY(rb_hash_aref(v_path_db, ULL2NUM(FRN)))->ptr[1]);
+         FRN = NUM2ULL(RARRAY_PTR(rb_hash_aref(v_path_db, ULL2NUM(FRN)))[1]);
 	   }
 
 	   v_path = rb_ary_join(v_path_array, rb_str_new("\\", 1));

@@ -1,8 +1,23 @@
-/* changejournal.c */
+// changejournal.c
 #include "ruby.h"
 #include <windows.h>
 #include <winioctl.h>
 #include "changejournal.h"
+
+// Ruby 1.9.x
+#ifndef RSTRING_PTR
+#define RSTRING_PTR(s) (RSTRING(s)->ptr)
+#endif
+#ifndef RSTRING_LEN
+#define RSTRING_LEN(s) (RSTRING(s)->len)
+#endif
+
+#ifndef RARRAY_PTR
+#define RARRAY_PTR(a) (RARRAY(a)->ptr)
+#endif
+#ifndef RARRAY_LEN
+#define RARRAY_LEN(a) (RARRAY(a)->len)
+#endif
 
 // Function Prototypes
 void InitialzeForMonitoring(ChangeJournalStruct *ptr);
