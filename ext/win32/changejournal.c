@@ -350,31 +350,31 @@ static VALUE changejournal_allocate(VALUE klass){
  */
 static VALUE changejournal_init(VALUE self, VALUE v_drive)
 {
-   ChangeJournalStruct* ptr;
-   LPCTSTR lpDriveLetter = StringValuePtr(v_drive);
+  ChangeJournalStruct* ptr;
+  LPCTSTR lpDriveLetter = StringValuePtr(v_drive);
 
-   Data_Get_Struct(self, ChangeJournalStruct, ptr);
+  Data_Get_Struct(self, ChangeJournalStruct, ptr);
 
-   // Do not allow a block for this class
-   if(rb_block_given_p())
-      rb_raise(cCJError, "block not permitted for this class");
+  // Do not allow a block for this class
+  if(rb_block_given_p())
+    rb_raise(cCJError, "block not permitted for this class");
 
-   // Initialize member variables
-   ptr->hCJ = INVALID_HANDLE_VALUE;
-   ptr->hCJAsync = INVALID_HANDLE_VALUE;
-   ZeroMemory(&(ptr->oCJAsync), sizeof(ptr->oCJAsync));
-   ptr->pbCJData = NULL;
-   ptr->pUsnRecord = NULL;
+  // Initialize member variables
+  ptr->hCJ = INVALID_HANDLE_VALUE;
+  ptr->hCJAsync = INVALID_HANDLE_VALUE;
+  ZeroMemory(&(ptr->oCJAsync), sizeof(ptr->oCJAsync));
+  ptr->pbCJData = NULL;
+  ptr->pUsnRecord = NULL;
 
-   /* Initialize the ChangeJournal object with the current drive letter and tell
-    * it to allocate a buffer of 10000 bytes to read journal records.
-    */
-   if(!Init(ptr, lpDriveLetter[0], 10000))
-      rb_raise(rb_eTypeError, "initialization error");
+  /* Initialize the ChangeJournal object with the current drive letter and tell
+   * it to allocate a buffer of 10000 bytes to read journal records.
+   */
+  if(!Init(ptr, lpDriveLetter[0], 10000))
+    rb_raise(rb_eArgError, "initialization error: %s", ErrorDescription(GetLastError()));
 
-   InitialzeForMonitoring(ptr);
+  InitialzeForMonitoring(ptr);
 
-   return self;
+  return self;
 }
 
 /*
