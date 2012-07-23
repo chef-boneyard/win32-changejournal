@@ -23,7 +23,7 @@
       }
    }
 
-   c.delete
+   cj.delete
 	
 == Notes
    Based on what the MSDN documentation says, this library requires NTFS, and
