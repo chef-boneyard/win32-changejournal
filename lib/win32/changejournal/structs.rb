@@ -19,7 +19,7 @@ module Windows
         layout(
           :StartUsn, :double,
           :ReasonMask, :ulong,
-          :ReturnOnlyOnClose, :ulong,
+          :ReturnOnlyOnClose, :bool,
           :Timeout, :uint64,
           :BytesToWaitFor, :uint64,
           :UsnJournalID, :uint64

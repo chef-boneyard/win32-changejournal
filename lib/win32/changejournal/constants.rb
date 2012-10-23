@@ -12,6 +12,7 @@ module Windows
       OPEN_EXISTING           = 3
       FILE_DEVICE_FILE_SYSTEM = 0x00000009
       METHOD_BUFFERED         = 0
+      METHOD_NEITHER          = 3
 
       def CTL_CODE(device, function, method, access)
         ((device) << 16) | ((access) << 14) | ((function) << 2) | (method)
@@ -19,6 +20,10 @@ module Windows
 
       def FSCTL_QUERY_USN_JOURNAL
         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 61, METHOD_BUFFERED, 0)
+      end
+
+      def FSCTL_READ_USN_JOURNAL
+        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, 0)
       end
     end
   end
