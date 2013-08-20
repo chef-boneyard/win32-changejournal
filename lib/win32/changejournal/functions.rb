@@ -3,12 +3,15 @@ require 'ffi'
 module Windows
   module ChangeJournal
     module Functions
-      extend FFI::Library
 
-      def attach_pfunc(*args)
-        attach_function(*args)
-        private args[0]
+      module FFI::Library
+        def attach_pfunc(*args)
+          attach_function(*args)
+          private args[0]
+        end
       end
+
+      extend FFI::Library
 
       typedef :uintptr_t, :handle
       typedef :ulong, :dword
