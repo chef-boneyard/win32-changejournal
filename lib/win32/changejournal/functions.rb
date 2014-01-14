@@ -21,7 +21,7 @@ module Windows
 
       attach_pfunc :CloseHandle, [:handle], :bool
       attach_pfunc :CreateFileW, [:buffer_in, :dword, :dword, :ptr, :dword, :dword, :handle], :handle
-      attach_pfunc :DeviceIoControl, [:handle, :dword, :buffer_in, :dword, :buffer_out, :dword, :ptr, :ptr], :bool
+      attach_pfunc :DeviceIoControl, [:handle, :dword, :ptr, :dword, :ptr, :dword, :ptr, :ptr], :bool
       attach_pfunc :FormatMessage, :FormatMessageA, [:ulong, :ptr, :ulong, :ulong, :ptr, :ulong, :ptr], :ulong
 
       ffi_lib FFI::Library::LIBC
