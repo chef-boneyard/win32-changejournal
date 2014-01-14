@@ -9,6 +9,9 @@ module Win32
     include Windows::ChangeJournal::Structs
     include Windows::ChangeJournal::Functions
 
+    # The version of the win32-changejournal library.
+    VERSION = '0.4.0'
+
     def initialize(drive = 'C:')
       drive = "\\\\.\\" << drive << 0.chr
       drive.encode!('UTF-16LE')
@@ -84,4 +87,6 @@ module Win32
   end
 end
 
-Win32::ChangeJournal.new
+if $0 == __FILE__
+  cj = Win32::ChangeJournal.new
+end
