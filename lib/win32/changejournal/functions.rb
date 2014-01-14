@@ -23,6 +23,7 @@ module Windows
       attach_pfunc :CreateFileW, [:buffer_in, :dword, :dword, :ptr, :dword, :dword, :handle], :handle
       attach_pfunc :DeviceIoControl, [:handle, :dword, :ptr, :dword, :ptr, :dword, :ptr, :ptr], :bool
       attach_pfunc :FormatMessage, :FormatMessageA, [:ulong, :ptr, :ulong, :ulong, :ptr, :ulong, :ptr], :ulong
+      attach_pfunc :HeapAlloc, [:handle, :dword, :size_t], :pointer
 
       ffi_lib FFI::Library::LIBC
 
