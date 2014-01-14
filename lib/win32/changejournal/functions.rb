@@ -20,10 +20,13 @@ module Windows
       ffi_lib :kernel32
 
       attach_pfunc :CloseHandle, [:handle], :bool
+      attach_pfunc :CreateEvent, :CreateEventA, [:ptr, :bool, :bool, :string], :handle
       attach_pfunc :CreateFileW, [:buffer_in, :dword, :dword, :ptr, :dword, :dword, :handle], :handle
       attach_pfunc :DeviceIoControl, [:handle, :dword, :ptr, :dword, :ptr, :dword, :ptr, :ptr], :bool
       attach_pfunc :FormatMessage, :FormatMessageA, [:ulong, :ptr, :ulong, :ulong, :ptr, :ulong, :ptr], :ulong
+      attach_pfunc :GetProcessHeap, [], :handle
       attach_pfunc :HeapAlloc, [:handle, :dword, :size_t], :pointer
+      attach_pfunc :HeapFree, [:handle, :dword, :ptr], :bool
 
       ffi_lib FFI::Library::LIBC
 
