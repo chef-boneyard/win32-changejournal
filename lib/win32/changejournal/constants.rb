@@ -26,6 +26,10 @@ module Windows
       def FSCTL_READ_USN_JOURNAL
         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, 0)
       end
+
+      def FSCTL_CREATE_USN_JOURNAL
+        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 57,  METHOD_NEITHER, 0)
+      end
     end
   end
 end
