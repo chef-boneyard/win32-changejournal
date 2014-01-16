@@ -93,6 +93,51 @@ module Win32
         CloseHandle(handle)
       end
     end
+
+    private
+
+    def Create(handle, maxsize, delta)
+      bytes = FFI::MemoryPointer.new(:ulong)
+      cujd  = CREATE_USN_JOURNAL_DATA.new
+
+      cujd[:MaximumSize] = maxsize
+      cujd[:AllocationDelta] = delta
+
+      bool = DeviceIoControl(
+        handle,
+        FSCTL_CREATE_USN_JOURNAL(),
+        cujd,
+        cujd.size,
+        nil,
+        0,
+        bytes,
+        NULL
+      )
+
+      bool
+    end
+
+    def Open(drive, access = nil, async = false)
+      flags = async ? FILE_FLAG_OVERLAPPED : 0
+      access ||= GENERIC_READ | GENERIC_WRITE,
+
+      drive = "\\\\.\\" << drive << 0.chr
+      drive.encode!('UTF-16LE')
+
+      handle = CreateFile(
+        file,
+        access,
+        FILE_SHARE_READ | FILE_SHARE_WRITE,
+        nil,
+        OPEN_EXISTING,
+        flags,
+        0
+      )
+
+      if handle == INVALID_HANDLE_VALUE
+        raise_windows_error
+      end
+    end
   end
 end
 
