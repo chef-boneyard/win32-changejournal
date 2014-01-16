@@ -13,21 +13,23 @@ module Win32
     VERSION = '0.4.0'
 
     def initialize(drive = 'C:')
+      flags = File.directory?(drive) ? FILE_FLAG_BACKUP_SEMANTICS : 0
+
       drive = "\\\\.\\" << drive << 0.chr
       drive.encode!('UTF-16LE')
 
-      handle = CreateFileW(
+      handle = CreateFile(
         drive,
         GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
         nil,
         OPEN_EXISTING,
-        0,
+        flags,
         0
       )
 
       if handle == INVALID_HANDLE_VALUE
-        raise SystemCallError.new("CreateFileW", FFI.errno)
+        raise SystemCallError.new("CreateFile", FFI.errno)
       end
 
       begin
@@ -46,7 +48,7 @@ module Win32
         )
 
         unless bool
-          raise SystemCallError.new("DeviceIoControl", FFI.errno)
+          raise_windows_error('DeviceIoControl')
         end
 
         read_data = READ_USN_JOURNAL_DATA.new
@@ -57,7 +59,7 @@ module Win32
         read_data[:BytesToWaitFor] = 0
         read_data[:UsnJournalID] = journal_data[:UsnJournalID]
 
-        buffer = 0.chr * 4096
+        buffer = FFI::MemoryPointer.new(:char, 4096)
         bytes  = FFI::MemoryPointer.new(:ulong)
 
         bool = DeviceIoControl(
@@ -72,14 +74,21 @@ module Win32
         )
 
         unless bool
-          raise SystemCallError.new("DeviceIoControl", FFI.errno)
+          raise_windows_error('DeviceIoControl')
         end
 
-        usn   = FFI::MemoryPointer.new(:double)
-        bytes = bytes.read_ulong
-        return_bytes = bytes - usn.size
+        usn = FFI::MemoryPointer.new(:double) # USN data type
+        ret_bytes = bytes.read_ulong - usn.size
 
-        p buffer[0,USN_RECORD.size]
+        usn_rec = USN_RECORD.new(buffer)
+        p usn_rec[:RecordLength]
+        p usn_rec[:FileNameLength]
+        p usn_rec[:FileName]
+
+        #while ret_bytes > 0
+        #  usn_rec[:FileName].read_bytes(usn_rec[:FileNameLength]/2)
+        #  ret_bytes -= usn_rec[:RecordLength]
+        #end
       ensure
         CloseHandle(handle)
       end
@@ -88,5 +97,6 @@ module Win32
 end
 
 if $0 == __FILE__
+  # Run with admin privileges
   cj = Win32::ChangeJournal.new
 end
