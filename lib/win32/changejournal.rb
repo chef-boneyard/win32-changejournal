@@ -96,6 +96,27 @@ module Win32
 
     private
 
+    def Delete(handle, journalid, flags)
+      bytes = FFI::MemoryPointer.new(:ulong)
+      dujd  = DELETE_USN_JOURNAL_DATA.new
+
+      dujd[:UsnJournalID] = journalid
+      dujd[:DeleteFlags]  = flags
+
+      bool = DeviceIoControl(
+        handle,
+        FSCTL_DELETE_USN_JOURNAL(),
+        dujd,
+        dujd.size,
+        nil,
+        0,
+        bytes,
+        nil
+      )
+
+      bool
+    end
+
     def Create(handle, maxsize, delta)
       bytes = FFI::MemoryPointer.new(:ulong)
       cujd  = CREATE_USN_JOURNAL_DATA.new
