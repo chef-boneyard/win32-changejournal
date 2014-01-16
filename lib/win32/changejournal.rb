@@ -96,6 +96,23 @@ module Win32
 
     private
 
+    def Query(handle, journal_data)
+      bytes = FFI::MemoryPointer.new(:ulong)
+
+      bool = DeviceIoControl(
+        handle,
+        FSCTL_QUERY_USN_JOURNAL(),
+        nil,
+        0,
+        journal_data,
+        journal_data.size,
+        bytes,
+        nil
+      )
+
+      bool
+    end
+
     def Delete(handle, journalid, flags)
       bytes = FFI::MemoryPointer.new(:ulong)
       dujd  = DELETE_USN_JOURNAL_DATA.new
