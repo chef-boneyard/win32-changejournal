@@ -96,6 +96,18 @@ module Win32
 
     private
 
+    def SeekToUsn(usn, reason, returnonly, journalid)
+      @rujd[:StartUsn]          = usn
+      @rujd[:ReasonMask]        = reason
+      @rujd[:ReturnOnlyOnClose] = returnonly
+      @rujd[:Timeout]           = 0
+      @rujd[:BytesToWaitFor]    = 0
+      @rujd[:UsnJournalID]      = journalid
+
+      @cbcjdata = 0
+      @usn_record = nil
+    end
+
     def Query(handle, journal_data)
       bytes = FFI::MemoryPointer.new(:ulong)
 
