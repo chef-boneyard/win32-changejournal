@@ -3,6 +3,10 @@ require 'ffi'
 module Windows
   module ChangeJournal
     module Structs
+      class CREATE_USN_JOURNAL_DATA < FFI::Struct
+        layout(:MaximumSize, :uint64, :AllocationDelta, :uint64)
+      end
+
       class USN_JOURNAL_DATA < FFI::Struct
         layout(
           :UsnJournalID, :uint64,
