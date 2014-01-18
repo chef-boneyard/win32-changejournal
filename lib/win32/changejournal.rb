@@ -52,11 +52,11 @@ module Win32
           previous = object.PreviousInstance
 
           target.Properties_.each{ |prop|
-            if prop.Value != previous.Properties_.send(prop.Name)
+            if prop.Value != previous.send(prop.Name)
               puts "Changed: " + target.Name
               puts "Property: " + prop.Name
-              puts "Previous value: " + previous.Properties_.send(prop.Name)
-              puts "New value: " + prop.Value
+              puts "Previous value: " + previous.send(prop.Name).to_s
+              puts "New value: " + prop.Value.to_s
             end
           }
         end
