@@ -52,20 +52,14 @@ module Win32
           previous = object.PreviousInstance
 
           target.Properties_.each{ |prop|
-            if prop.Value != previous.Properties_[target.Name].Value
+            if prop.Value != previous.Properties_.send(prop.Name)
               puts "Changed: " + target.Name
               puts "Property: " + prop.Name
-              puts "Previous value: " + previous.Properties_[prop.Name]
+              puts "Previous value: " + previous.Properties_.send(prop.Name)
               puts "New value: " + prop.Value
             end
           }
         end
-        #p object.Path_.Class
-        #p object.TargetInstance.Path
-        #p object.TargetInstance.Name
-        #p object.TargetInstance.Drive
-        #puts "Modification of " + object.TargetInstance.Name
-
       }
 
       if seconds
