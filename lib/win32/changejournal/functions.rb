@@ -27,6 +27,8 @@ module Windows
       attach_pfunc :GetProcessHeap, [], :handle
       attach_pfunc :HeapAlloc, [:handle, :dword, :size_t], :pointer
       attach_pfunc :HeapFree, [:handle, :dword, :ptr], :bool
+      attach_pfunc :HeapSize, [:handle, :dword, :ptr], :size_t
+      attach_pfunc :SetLastError, [:dword], :void
 
       ffi_lib FFI::Library::LIBC
 
