@@ -56,10 +56,11 @@ module Win32
     # # Monitor filesystem for one minute.
     # cj.wait(60){ |s| p s }
     #
-    # # Sample struct:
+    # # Sample struct returned after file was marked
+    # # hidden and read-only:
     #
     # #<struct Struct::ChangeJournalStruct
-    #    file="c:\\users\\foo\\test.txt",
+    #    file="c:\\Users\\foo\\test.txt",
     #    action="modify",
     #    changes=[
     #      ["AccessMask", "2032127", "2032057"],
@@ -82,6 +83,7 @@ module Win32
         and targetInstance.Path='#{folder}'
       }
 
+      # Asynchronous call. This will let the user break out of it manually.
       sink  = WIN32OLE.new('WbemScripting.SWbemSink')
       event = WIN32OLE_EVENT.new(sink)
 
@@ -117,6 +119,7 @@ module Win32
         yield struct
       }
 
+      # If an argument is provided, timeout after that many seconds.
       if seconds
         begin
           Timeout.timeout(seconds){
@@ -134,11 +137,4 @@ module Win32
       end
     end
   end
-end
-
-if $0 == __FILE__
-  #https://social.technet.microsoft.com/Forums/scriptcenter/en-US/445f54d2-3b0c-4984-86e0-22f5734b368a/vbscript-wmi-filesystemwatcher?forum=ITCG
-  include Win32
-  cj = ChangeJournal.new("C:/Users/djberge")
-  cj.wait{ |s| p s }
 end
