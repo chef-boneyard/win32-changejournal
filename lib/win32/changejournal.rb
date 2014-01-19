@@ -96,6 +96,37 @@ module Win32
 
     private
 
+    def EnumNext(handle)
+      unless @buffer
+        raise "no buffer to use"
+      end
+
+      @usn_record = nil
+
+      bool = DeviceIoControl(
+        handle,
+        FSCTL_READ_USN_JOURNAL(),
+        @rujd,
+        @rujd.size,
+        @buffer,
+        HeapSize(GetProcessHeap(), 0, @buffer),
+        @bytes,
+        nil
+      )
+
+      if bool
+        SetLastError(0) # NO_ERROR
+        @rujd[:StartUsn] = @buffer
+        usn = FFI::MemoryPointer.new(:double)
+
+        if @bytes > usn.size
+          @usn_record = @buffer[usn.size]
+        end
+      else
+        @usn_record = @usn_record + @usn_record[:RecordLength]
+      end
+    end
+
     def SeekToUsn(usn, reason, returnonly, journalid)
       @rujd[:StartUsn]          = usn
       @rujd[:ReasonMask]        = reason
@@ -104,7 +135,7 @@ module Win32
       @rujd[:BytesToWaitFor]    = 0
       @rujd[:UsnJournalID]      = journalid
 
-      @cbcjdata = 0
+      @bytes = 0
       @usn_record = nil
     end
 
